@@ -4,16 +4,17 @@ const userController = {
     //get all users
     getAllUsers(req, res){
         User.find({})
-            .populate(
-                {
-                    path:'thoughts',
-                    select:'-__v'
-                },
-                {
-                    path:'friends',
-                    select:'-__v'
-                }
-            )
+            // .populate(
+            //     {
+            //         path:'thoughts',
+            //         select:'-__v'
+            //     },
+            //     {
+            //         path:'friends',
+            //         select:'-__v'
+            //     }
+            // )
+            .select('-__v')
             .then(dbUserData => res.json(dbUserData))
             .catch(err => res.status(500).json(err));
     }, 
@@ -37,7 +38,6 @@ const userController = {
     
     //create new user
     createNewUser({body}, res){
-        console.log(body);
         User.create(body)
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err));

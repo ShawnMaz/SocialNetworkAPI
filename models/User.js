@@ -12,7 +12,8 @@ const UserSchema = new Schema(
         email:{
             type:String,
             required:true, 
-            unqiue:true
+            unqiue:true, 
+            match:/([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
         }, 
         thoughts:{
             type:Schema.Types.ObjectId, 
