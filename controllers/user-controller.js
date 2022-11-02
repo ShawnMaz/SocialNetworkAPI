@@ -1,5 +1,4 @@
-const { response } = require('express');
-const {User} = require('../models');
+const User = require('../models');
 
 const userController = {
     //get all users
@@ -38,11 +37,10 @@ const userController = {
     
     //create new user
     createNewUser({body}, res){
-        User.create(
-            body
-        )
+        console.log(body);
+        User.create(body)
         .then(dbUserData => res.json(dbUserData))
-        .catch(err => res.status(500).json(err));
+        .catch(err => res.status(400).json(err));
     },
 
     //update a user by id

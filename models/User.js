@@ -1,20 +1,18 @@
 const {Schema, model} = require('mongoose');
-const validator = require('validator');
+const {isAlphaNumeric, isEmail} = require('validator');
 
 const UserSchema = new Schema(
     {
         username:{
             type:String,
-            unique: true,
             required: true,
-            trim: true, 
-            validate:[validator.isAlphaNumeric, 'Username must be alphanumeric']
+            unqiue:true,
+            trim: true
         }, 
         email:{
             type:String,
-            unique:true,
-            required:true,
-            validate: [validator.isEmail, 'Email must be a valid email address']
+            required:true, 
+            unqiue:true
         }, 
         thoughts:{
             type:Schema.Types.ObjectId, 
@@ -30,6 +28,7 @@ const UserSchema = new Schema(
             virtuals:true,
         }, 
         id:false
+
     }
 )
 
@@ -37,6 +36,6 @@ UserSchema.virtual('friendCount', function(){
     return this.friends.reduce((total, friend) => total + friend.User.count, 0);
 });
 
-const User = new model('User', UserSchema);
+const User = model('User', UserSchema);
 
 module.exports = User;
