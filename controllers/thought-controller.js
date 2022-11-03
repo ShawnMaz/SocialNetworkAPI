@@ -30,7 +30,7 @@ const thoughtController = {
             .catch(err => res.status(500).json(err));
     },
 
-    // read a though by id
+    // read a thought by id
     getThoughtById({params}, res){
         Thought.findOne(
             {_id:params.id}
@@ -38,6 +38,23 @@ const thoughtController = {
             .then(dbThoughtData => {
                 if(!dbThoughtData){
                     res.status(404).json({message:`Unable to find the thought with the id: ${params.id}`});
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
+    },
+
+    // update a thought by id
+    updateThoughtbyId({body, params}, res){
+        Thought.findOneAndUpdate(
+            {_id:params.id},
+            body,
+            {new:true, runValidators:true}
+        )
+            .then(dbThoughtData => {
+                if(!dbThoughtData){
+                    res.status(404).json({message:`Unable to find a thought with the id: ${params.id}`});
                     return;
                 }
                 res.json(dbThoughtData);
