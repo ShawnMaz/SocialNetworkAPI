@@ -28,6 +28,21 @@ const thoughtController = {
             .sort({_id:-1})
             .then(dbThoughtData => res.json(dbThoughtData))
             .catch(err => res.status(500).json(err));
+    },
+
+    // read a though by id
+    getThoughtById({params}, res){
+        Thought.findOne(
+            {_id:params.id}
+        )
+            .then(dbThoughtData => {
+                if(!dbThoughtData){
+                    res.status(404).json({message:`Unable to find the thought with the id: ${params.id}`});
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
     }
 }
 
