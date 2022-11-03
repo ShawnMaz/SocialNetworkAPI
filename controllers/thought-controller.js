@@ -104,6 +104,23 @@ const thoughtController = {
                 res.json(dbThoughtData);
             })
             .catch(err => res.status(400).json(err));
+    }, 
+
+    // delete a reaction by id
+    deleteReactionById({params}, res){
+        Thought.findOneAndUpdate(
+            {_id:params.thoughtId},
+            {$pull:{reactions:{reactionId:params.reactionId}}},
+            {new:true}
+        )
+            .then(dbThoughtData => {
+                if(!dbThoughtData){
+                    res.status(404).json({message: `Unable to find a thought with the id:${params.thoughtId}`});
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
     }
 }
 
