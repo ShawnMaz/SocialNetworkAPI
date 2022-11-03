@@ -46,7 +46,7 @@ const thoughtController = {
     },
 
     // update a thought by id
-    updateThoughtbyId({body, params}, res){
+    updateThoughtById({body, params}, res){
         Thought.findOneAndUpdate(
             {_id:params.id},
             body,
@@ -58,6 +58,33 @@ const thoughtController = {
                     return;
                 }
                 res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
+    }, 
+
+    // delete a thought by id
+    deleteThoughtById({params}, res){
+        Thought.findOneAndDelete(
+            {_id:params.thoughtId}
+        )
+            .then(dbThoughtData => {
+                if(!dbThoughtData){
+                    res.status(404).json({message:`Unable to find the thought with the id" ${params.thoughtId}`});
+                    return
+                }
+                return User.findOneAndUpdate(
+                    {_id:params.userId},
+                    {$pull:{thoughts:params.thoughtId}}, 
+                    {new:true}
+                )
+                    .then(dbUserData => {
+                        if(!dbUserData){
+                            res.status(404).json({message:`Unable to find user the id: ${params.userId}`});
+                            return;
+                        }
+                        res.json(dbUserData);
+                    })
+                    .catch(err => res.status(400).json(err));
             })
             .catch(err => res.status(400).json(err));
     }
