@@ -1,3 +1,5 @@
+// This file has been imported from the module 18 class work
+
 const addDateSuffix = date => {
   let dateStr = date.toString();
 
