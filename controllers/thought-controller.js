@@ -87,6 +87,23 @@ const thoughtController = {
                     .catch(err => res.status(400).json(err));
             })
             .catch(err => res.status(400).json(err));
+    }, 
+
+    // create a reaction
+    createReaction({body, params}, res){
+        Thought.findOneAndUpdate(
+            {_id:params.thoughtId},
+            {$push:{reactions:body}}, 
+            {new:true, runValidators:true}
+        )
+            .then(dbThoughtData => {
+                if(!dbThoughtData){
+                    res.status(404).json({message:`Unable to find the thought with id: ${params.thoughtId}`});
+                    return;
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(err => res.status(400).json(err));
     }
 }
 
